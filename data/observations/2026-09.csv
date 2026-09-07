@@ -1,0 +1,2 @@
+timestamp_utc,timestamp_local,station_name,temperature_c,feels_like_c,dew_point_c,humidity_pct,pressure_relative_hpa,pressure_absolute_hpa,wind_speed_kn,wind_gust_kn,max_daily_gust_kn,wind_direction_deg,wind_direction_compass,rain_rate_mm_hr,rain_daily_mm,rain_event_mm,rain_monthly_mm,rain_yearly_mm,solar_radiation_w_m2,uv_index
+2026-09-07T04:00:00Z,2026-09-07T04:00:00.000Z,Brambley ,15.89,15.89,14.08,89.0,1011.14,1018.63,2.17,2.95,11.82,248.0,WSW,0.0,0.0,0.0,29.21,,0.0,0.0
