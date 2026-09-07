@@ -1,0 +1,11 @@
+{
+  "status": "awaiting_first_observation",
+  "units": {
+    "temperature": "°C",
+    "rain": "mm",
+    "pressure": "hPa",
+    "wind": "kn",
+    "solar_irradiance": "W/m²",
+    "solar_energy": "kWh/m²"
+  }
+}
