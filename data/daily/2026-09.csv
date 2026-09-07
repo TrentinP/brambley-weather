@@ -1,2 +1,3 @@
 date_local,temperature_avg_c,temperature_high_c,temperature_low_c,humidity_avg_pct,pressure_avg_hpa,wind_avg_kn,peak_gust_kn,rain_total_mm,solar_peak_w_m2,solar_energy_kwh_m2,observation_count
 2026-09-06,15.84,15.89,15.78,89.0,1011.2,2.26,3.91,0.0,0.0,0.0,2
+2026-09-07,15.72,15.72,15.72,93.0,1012.0,4.87,6.0,0.0,0.0,0.0,1
