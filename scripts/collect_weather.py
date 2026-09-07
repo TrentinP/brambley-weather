@@ -9,6 +9,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import requests
 
@@ -17,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 OBS_DIR = DATA / "observations"
 DAILY_DIR = DATA / "daily"
+BRAMBLEY_TZ = ZoneInfo("America/Los_Angeles")
 
 MPH_TO_KNOTS = 0.8689762419
 INHG_TO_HPA = 33.8638866667
@@ -29,7 +31,7 @@ OBS_FIELDS = [
     "wind_speed_kn", "wind_gust_kn", "max_daily_gust_kn",
     "wind_direction_deg", "wind_direction_compass",
     "rain_rate_mm_hr", "rain_daily_mm", "rain_event_mm",
-    "rain_monthly_mm", "rain_yearly_mm",
+    "rain_monthly_mm", "rain_total_mm",
     "solar_radiation_w_m2", "uv_index",
 ]
 
@@ -128,8 +130,8 @@ def parse_timestamp(raw: dict) -> tuple[datetime, str]:
             datetime.fromisoformat(str(text).replace("Z", "+00:00")).astimezone(timezone.utc)
             if text else datetime.now(timezone.utc)
         )
-    local_text = str(raw.get("date") or utc_dt.isoformat())
-    return utc_dt, local_text
+    local_dt = utc_dt.astimezone(BRAMBLEY_TZ)
+    return utc_dt, local_dt.isoformat()
 
 
 def normalize(device: dict) -> dict:
@@ -140,7 +142,7 @@ def normalize(device: dict) -> dict:
     record = {
         "timestamp_utc": utc_dt.isoformat().replace("+00:00", "Z"),
         "timestamp_local": local_text,
-        "station_name": info.get("name") or info.get("location") or "Brambley",
+        "station_name": (info.get("name") or info.get("location") or "Brambley").strip(),
         "temperature_c": f_to_c(raw.get("tempf")),
         "feels_like_c": f_to_c(raw.get("feelsLike")),
         "dew_point_c": f_to_c(raw.get("dewPoint")),
@@ -156,7 +158,7 @@ def normalize(device: dict) -> dict:
         "rain_daily_mm": in_to_mm(raw.get("dailyrainin")),
         "rain_event_mm": in_to_mm(raw.get("eventrainin")),
         "rain_monthly_mm": in_to_mm(raw.get("monthlyrainin")),
-        "rain_yearly_mm": in_to_mm(raw.get("yearlyrainin")),
+        "rain_total_mm": in_to_mm(raw.get("totalrainin")),
         "solar_radiation_w_m2": number(raw.get("solarradiation")),
         "uv_index": number(raw.get("uv")),
     }
@@ -164,8 +166,8 @@ def normalize(device: dict) -> dict:
 
 
 def append_observation(record: dict) -> Path:
-    utc_dt = datetime.fromisoformat(record["timestamp_utc"].replace("Z", "+00:00"))
-    path = OBS_DIR / f"{utc_dt:%Y-%m}.csv"
+    local_dt = datetime.fromisoformat(record["timestamp_local"])
+    path = OBS_DIR / f"{local_dt:%Y-%m}.csv"
     OBS_DIR.mkdir(parents=True, exist_ok=True)
 
     existing = set()
@@ -249,7 +251,6 @@ def rebuild_daily(monthly_csv: Path) -> Path:
 
 
 def write_current(record: dict, device: dict) -> None:
-    raw = device.get("lastData") or {}
     current = {
         "status": "ok",
         "station": record["station_name"],
@@ -266,10 +267,9 @@ def write_current(record: dict, device: dict) -> None:
             "wind_gust_kn": "kn", "max_daily_gust_kn": "kn",
             "wind_direction_deg": "°", "rain_rate_mm_hr": "mm/h",
             "rain_daily_mm": "mm", "rain_event_mm": "mm", "rain_monthly_mm": "mm",
-            "rain_yearly_mm": "mm", "solar_radiation_w_m2": "W/m²",
+            "rain_total_mm": "mm", "solar_radiation_w_m2": "W/m²",
             "uv_index": "UV index"
         },
-        "source_fields_available": sorted(raw.keys()),
     }
     DATA.mkdir(parents=True, exist_ok=True)
     (DATA / "current.json").write_text(json.dumps(current, indent=2) + "\n", encoding="utf-8")
