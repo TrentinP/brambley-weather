@@ -1,6 +1,12 @@
 name: Collect Brambley Weather
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/**"
+      - ".github/workflows/weather.yml"
+      - "requirements.txt"
   schedule:
     - cron: "*/5 * * * *"
   workflow_dispatch:
