@@ -1,12 +1,10 @@
 <!-- Brambley Weather Station improvements, 2026-09. Paste in a Code Block immediately BELOW the main weather-station block. -->
 <style>
-/* Current conditions: 3 x 3 instrument grid. */
 #brambley-weather .brw-metrics{grid-template-columns:repeat(3,1fr)!important}
-/* Today: temperature summary in header + three compact matched instruments. */
-#brambley-weather .brw-today-summary{min-width:260px;text-align:right}
-#brambley-weather .brw-today-summary small{display:block;color:#4f6238;font-size:11px;letter-spacing:.14em;font-weight:800;margin-bottom:5px}
-#brambley-weather .brw-today-summary strong{display:block;color:#292b27;font-size:18px;font-weight:500;line-height:1.35}
-#brambley-weather .brw-today-summary span{display:block;color:#55584f;font-size:13px;margin-top:4px}
+#brambley-weather .brw-temp-summary{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.5}
+#brambley-weather .brw-temp-summary strong{font-size:13px;font-weight:500;color:var(--text)}
+#brambley-weather .brw-lastobs{margin-top:14px;color:var(--muted);font-size:12px;line-height:1.4}
+#brambley-weather .brw-lastobs small{display:block;color:var(--muted);font-size:10px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:2px}
 #brambley-weather .brw-todaycharts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px}
 #brambley-weather .brw-mini-chart{border:1px solid #cbc9bf;padding:15px 14px 12px;min-width:0}
 #brambley-weather .brw-mini-chart small{display:block;color:#4f6238!important;font-size:10px;letter-spacing:.13em;font-weight:800;margin-bottom:2px}
@@ -16,7 +14,7 @@
 #brambley-weather .brw-seasonal{margin-top:0;padding-top:0;border-top:0;margin-bottom:30px}
 #brambley-weather .brw-seasonal>.brw-subhead{display:none!important}
 #brambley-weather .brw-solarhistory{margin-top:0;padding-top:30px}
-@media(max-width:800px){#brambley-weather .brw-metrics{grid-template-columns:repeat(3,1fr)!important}#brambley-weather .brw-today-summary{text-align:left;min-width:0}#brambley-weather .brw-todaycharts{grid-template-columns:1fr}#brambley-weather .brw-mini-canvas{height:155px}}
+@media(max-width:800px){#brambley-weather .brw-metrics{grid-template-columns:repeat(3,1fr)!important}#brambley-weather .brw-todaycharts{grid-template-columns:1fr}#brambley-weather .brw-mini-canvas{height:155px}}
 @media(max-width:560px){#brambley-weather .brw-metrics{grid-template-columns:repeat(2,1fr)!important}}
 </style>
 <script>
@@ -29,58 +27,30 @@ async function text(path){const r=await fetch(RAW+path+'?v='+Date.now());if(!r.o
 function csv(s){const [h,...rs]=s.trim().split(/\r?\n/).map(x=>x.split(','));return rs.map(r=>Object.fromEntries(h.map((k,i)=>[k,r[i]])))}
 function clock(s){return new Date(s).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})}
 
-/* Rebuild the current measurement panel in the requested 3 x 3 order. */
-try{
- const d=JSON.parse(await text('data/current.json')),m=d.measurements||{},metrics=root.querySelector('.brw-metrics');
- if(metrics){metrics.innerHTML=`
-  <div><small>Wind</small><b>${fmt(m.wind_speed_kn)} kn ${m.wind_direction_compass||''}</b></div>
-  <div><small>Gust</small><b>${fmt(m.wind_gust_kn)} kn</b></div>
-  <div><small>Humidity</small><b>${fmt(m.humidity_pct,0)}%</b></div>
-  <div><small>Rain today</small><b>${fmt(m.rain_daily_mm)} mm</b></div>
-  <div><small>Rain rate</small><b>${fmt(m.rain_rate_mm_hr)} mm/hr</b></div>
-  <div><small>Dew point</small><b>${fmt(m.dew_point_c)}°C</b></div>
-  <div><small>Pressure</small><b>${fmt(m.pressure_relative_hpa)} hPa</b></div>
-  <div><small>Solar irradiance</small><b>${fmt(m.solar_radiation_w_m2,0)} W/m²</b></div>
-  <div><small>UV index</small><b>${fmt(m.uv_index)}</b></div>`;}
-}catch(e){console.error('Brambley current grid:',e)}
+let current=null;
+try{current=JSON.parse(await text('data/current.json'));const m=current.measurements||{},today=current.today||{},metrics=root.querySelector('.brw-metrics');
+ if(metrics){metrics.innerHTML=`<div><small>Wind</small><b>${fmt(m.wind_speed_kn)} kn ${m.wind_direction_compass||''}</b></div><div><small>Gust</small><b>${fmt(m.wind_gust_kn)} kn</b></div><div><small>Humidity</small><b>${fmt(m.humidity_pct,0)}%</b></div><div><small>Rain today</small><b>${fmt(m.rain_daily_mm)} mm</b></div><div><small>Rain rate</small><b>${fmt(m.rain_rate_mm_hr)} mm/hr</b></div><div><small>Dew point</small><b>${fmt(m.dew_point_c)}°C</b></div><div><small>Pressure</small><b>${fmt(m.pressure_relative_hpa)} hPa</b></div><div><small>Solar irradiance</small><b>${fmt(m.solar_radiation_w_m2,0)} W/m²</b></div><div><small>UV index</small><b>${fmt(m.uv_index)}</b></div>`;}
+ const tempblock=root.querySelector('.brw-tempblock');if(tempblock){const old=tempblock.querySelector('.brw-temp-summary');if(old)old.remove();const s=document.createElement('div');s.className='brw-temp-summary';s.innerHTML='<strong>High '+fmt(today.temperature_high_c)+'°C · Low '+fmt(today.temperature_low_c)+'°C</strong><br>Mean '+fmt(today.temperature_mean_c)+'°C';tempblock.appendChild(s);}
+ const strip=root.querySelector('.brw-strip');if(strip)strip.remove();
+ const live=root.querySelector('.brw-live');if(live){let obs=root.querySelector('.brw-lastobs');if(!obs){obs=document.createElement('div');obs.className='brw-lastobs';live.after(obs);}const t=current.observed_at_local?clock(current.observed_at_local):'--';obs.innerHTML='<small>Last observation</small>'+t;}
+}catch(e){console.error('Brambley current layout:',e)}
 
-/* Today at Brambley: move temperature summary into heading and create 3 matched instruments. */
-try{
- const d=JSON.parse(await text('data/current.json')),today=d.today||{},section=[...root.querySelectorAll('.brw-section')].find(s=>s.querySelector('.brw-sectionhead h3')?.textContent.trim()==='Today at Brambley');
- const head=section?.querySelector('.brw-sectionhead'),cards=section?.querySelector('.brw-cards');
- if(head){const oldp=head.querySelector(':scope > p');if(oldp)oldp.remove();const summary=document.createElement('div');summary.className='brw-today-summary';summary.innerHTML='<small>TODAY\'S TEMPERATURE</small><strong>High '+fmt(today.temperature_high_c)+'°C · Low '+fmt(today.temperature_low_c)+'°C</strong><span>Mean '+fmt(today.temperature_mean_c)+'°C</span>';head.appendChild(summary);}
- if(cards){cards.remove();}
- if(section&&!$('brw-rainrate-chart')){const wrap=document.createElement('div');wrap.className='brw-todaycharts';wrap.innerHTML='<div class="brw-mini-chart"><small>RAINFALL RATE</small><h4>Rain through the day</h4><div class="brw-mini-canvas"><canvas id="brw-rainrate-chart"></canvas></div></div><div class="brw-mini-chart"><small>BAROGRAPH</small><h4>Pressure through the day</h4><div class="brw-mini-canvas"><canvas id="brw-pressure-chart"></canvas></div></div><div class="brw-mini-chart"><small>HUMIDITY</small><h4>Humidity through the day</h4><div class="brw-mini-canvas"><canvas id="brw-humidity-chart"></canvas></div></div>';section.appendChild(wrap);}
-}catch(e){console.error('Brambley Today layout:',e)}
+/* Today at Brambley now contains only the three matched intraday instruments. */
+try{const section=[...root.querySelectorAll('.brw-section')].find(s=>s.querySelector('.brw-sectionhead h3')?.textContent.trim()==='Today at Brambley'),head=section?.querySelector('.brw-sectionhead'),cards=section?.querySelector('.brw-cards');if(head){const p=head.querySelector(':scope > p');if(p)p.remove();const prior=head.querySelector('.brw-today-summary');if(prior)prior.remove();}if(cards)cards.remove();if(section&&!$('brw-rainrate-chart')){const wrap=document.createElement('div');wrap.className='brw-todaycharts';wrap.innerHTML='<div class="brw-mini-chart"><small>RAINFALL RATE</small><h4>Rain through the day</h4><div class="brw-mini-canvas"><canvas id="brw-rainrate-chart"></canvas></div></div><div class="brw-mini-chart"><small>BAROGRAPH</small><h4>Pressure through the day</h4><div class="brw-mini-canvas"><canvas id="brw-pressure-chart"></canvas></div></div><div class="brw-mini-chart"><small>HUMIDITY</small><h4>Humidity through the day</h4><div class="brw-mini-canvas"><canvas id="brw-humidity-chart"></canvas></div></div>';section.appendChild(wrap);}}
+catch(e){console.error('Brambley Today layout:',e)}
 
-try{
- const now=new Date(),ym=now.toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'}).slice(0,7),today=now.toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'});
- const rows=csv(await text('data/observations/'+ym+'.csv')).filter(r=>(r.timestamp_local||'').slice(0,10)===today);const labels=rows.map(r=>clock(r.timestamp_local));
- const common={responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false}}};
+try{const now=new Date(),ym=now.toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'}).slice(0,7),today=now.toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'}),rows=csv(await text('data/observations/'+ym+'.csv')).filter(r=>(r.timestamp_local||'').slice(0,10)===today),labels=rows.map(r=>clock(r.timestamp_local)),common={responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false}}};
  new Chart($('brw-rainrate-chart'),{type:'line',data:{labels,datasets:[{data:rows.map(r=>num(r.rain_rate_mm_hr)),borderColor:'#55728a',backgroundColor:'rgba(85,114,138,.12)',fill:true,borderWidth:1.6,pointRadius:0,tension:.15,spanGaps:false}]},options:{...common,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+Number(c.raw).toFixed(1)+' mm/hr'}}},scales:{x:{ticks:{maxTicksLimit:4,color:'#51534c',font:{size:9}},grid:{display:false}},y:{beginAtZero:true,title:{display:true,text:'mm/hr',color:'#51534c',font:{size:9}},ticks:{color:'#51534c',font:{size:9},maxTicksLimit:5},grid:{color:'rgba(60,60,55,.10)'}}}}});
  const pressure=rows.map(r=>num(r.pressure_relative_hpa)).filter(v=>v!==null),pmin=pressure.length?Math.floor(Math.min(...pressure)-1):980,pmax=pressure.length?Math.ceil(Math.max(...pressure)+1):1040;
  new Chart($('brw-pressure-chart'),{type:'line',data:{labels,datasets:[{data:rows.map(r=>num(r.pressure_relative_hpa)),borderColor:'#5f6658',borderWidth:1.6,pointRadius:0,tension:.2,spanGaps:false}]},options:{...common,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+Number(c.raw).toFixed(1)+' hPa'}}},scales:{x:{ticks:{maxTicksLimit:4,color:'#51534c',font:{size:9}},grid:{display:false}},y:{min:pmin,max:pmax,title:{display:true,text:'hPa',color:'#51534c',font:{size:9}},ticks:{color:'#51534c',font:{size:9},maxTicksLimit:5},grid:{color:'rgba(60,60,55,.10)'}}}}});
- new Chart($('brw-humidity-chart'),{type:'line',data:{labels,datasets:[{data:rows.map(r=>num(r.humidity_pct)),borderColor:'#66808a',backgroundColor:'rgba(102,128,138,.08)',fill:true,borderWidth:1.6,pointRadius:0,tension:.2,spanGaps:false}]},options:{...common,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+Number(c.raw).toFixed(0)+'%'}}},scales:{x:{ticks:{maxTicksLimit:4,color:'#51534c',font:{size:9}},grid:{display:false}},y:{min:0,max:100,title:{display:true,text:'%',color:'#51534c',font:{size:9}},ticks:{color:'#51534c',font:{size:9},maxTicksLimit:5},grid:{color:'rgba(60,60,55,.10)'}}}}});
-}catch(e){console.error('Brambley intraday charts:',e)}
+ new Chart($('brw-humidity-chart'),{type:'line',data:{labels,datasets:[{data:rows.map(r=>num(r.humidity_pct)),borderColor:'#66808a',backgroundColor:'rgba(102,128,138,.08)',fill:true,borderWidth:1.6,pointRadius:0,tension:.2,spanGaps:false}]},options:{...common,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+Number(c.raw).toFixed(0)+'%'}}},scales:{x:{ticks:{maxTicksLimit:4,color:'#51534c',font:{size:9}},grid:{display:false}},y:{min:0,max:100,title:{display:true,text:'%',color:'#51534c',font:{size:9}},ticks:{color:'#51534c',font:{size:9},maxTicksLimit:5},grid:{color:'rgba(60,60,55,.10)'}}}}});}
+catch(e){console.error('Brambley intraday charts:',e)}
 
-/* Historical temperature palette. */
 try{const old=Chart.getChart($('brw-temp-chart'));if(old){const colors=['#a43b32','#d28a3a','#5683a6','#315b85'];old.data.datasets.forEach((d,i)=>{d.borderColor=colors[i];d.backgroundColor=colors[i];});old.update();}}catch(e){console.error('Temperature palette:',e)}
 
-/* Rebuild Monthly Rainfall so the NOAA normal is part of the chart from creation, not added after initialization. */
-try{
- const canvas=$('brw-rain-chart');if(canvas){const old=Chart.getChart(canvas);if(old)old.destroy();
- const observed=csv(await text('data/historical/monthly_rainfall_2020_2026.csv')),site=csv(await text('data/historical/rainfall_average_2020_2025.csv'));
- const siteAvg=Object.fromEntries(site.map(x=>[Number(x.month),num(x.average_rain_mm)]));
- const normalIn=[10.91,6.65,7.74,5.35,2.99,2.01,0.85,1.35,2.53,6.91,10.95,10.52],normal=normalIn.map(v=>v*25.4);
- new Chart(canvas,{data:{labels:observed.map(x=>x.month),datasets:[
-  {type:'bar',label:'Observed rainfall',data:observed.map(x=>num(x.monthly_rain_mm)),backgroundColor:'rgba(79,98,56,.62)',borderColor:'#4f6238',borderWidth:1},
-  {type:'line',label:'Brambley average (2020–2025)',data:observed.map(x=>siteAvg[Number(x.month.slice(5,7))]),borderColor:'#596451',backgroundColor:'#596451',pointRadius:0,borderWidth:2.2,tension:.1},
-  {type:'line',label:'NOAA normal (1991–2020)',data:observed.map(x=>normal[Number(x.month.slice(5,7))-1]),borderColor:'#9b603e',backgroundColor:'#9b603e',borderDash:[8,5],pointRadius:0,borderWidth:2.5,tension:.1}
- ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{labels:{color:'#3f413b',font:{size:13}}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+Number(c.raw).toFixed(1)+' mm'}}},scales:{x:{ticks:{maxTicksLimit:14,color:'#51534c',font:{size:12}},grid:{color:'rgba(60,60,55,.09)'}},y:{beginAtZero:true,title:{display:true,text:'Rainfall (mm)',color:'#3f413b',font:{size:13}},ticks:{color:'#51534c',font:{size:12}},grid:{color:'rgba(60,60,55,.11)'}}}}});
- const section=canvas.closest('.brw-section'),p=section?.querySelector('.brw-sectionhead p'),note=section?.querySelector('.brw-note');if(p)p.textContent='Observed monthly rainfall compared with the Brambley site average and NOAA’s 1991–2020 climate normal.';if(note)note.textContent='NOAA normal: Hoquiam Bowerman Airport, 1991–2020 U.S. Climate Normals. The Brambley comparison remains the 2020–2025 site average.';}
-}catch(e){console.error('NOAA rainfall chart:',e)}
+try{const canvas=$('brw-rain-chart');if(canvas){const old=Chart.getChart(canvas);if(old)old.destroy();const observed=csv(await text('data/historical/monthly_rainfall_2020_2026.csv')),site=csv(await text('data/historical/rainfall_average_2020_2025.csv')),siteAvg=Object.fromEntries(site.map(x=>[Number(x.month),num(x.average_rain_mm)])),normal=[10.91,6.65,7.74,5.35,2.99,2.01,.85,1.35,2.53,6.91,10.95,10.52].map(v=>v*25.4);new Chart(canvas,{data:{labels:observed.map(x=>x.month),datasets:[{type:'bar',label:'Observed rainfall',data:observed.map(x=>num(x.monthly_rain_mm)),backgroundColor:'rgba(79,98,56,.62)',borderColor:'#4f6238',borderWidth:1},{type:'line',label:'Brambley average (2020–2025)',data:observed.map(x=>siteAvg[Number(x.month.slice(5,7))]),borderColor:'#596451',backgroundColor:'#596451',pointRadius:0,borderWidth:2.2,tension:.1},{type:'line',label:'NOAA normal (1991–2020)',data:observed.map(x=>normal[Number(x.month.slice(5,7))-1]),borderColor:'#9b603e',backgroundColor:'#9b603e',borderDash:[8,5],pointRadius:0,borderWidth:2.5,tension:.1}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{labels:{color:'#3f413b',font:{size:13}}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+Number(c.raw).toFixed(1)+' mm'}}},scales:{x:{ticks:{maxTicksLimit:14,color:'#51534c',font:{size:12}},grid:{color:'rgba(60,60,55,.09)'}},y:{beginAtZero:true,title:{display:true,text:'Rainfall (mm)',color:'#3f413b',font:{size:13}},ticks:{color:'#51534c',font:{size:12}},grid:{color:'rgba(60,60,55,.11)'}}}}});const section=canvas.closest('.brw-section'),p=section?.querySelector('.brw-sectionhead p'),note=section?.querySelector('.brw-note');if(p)p.textContent='Observed monthly rainfall compared with the Brambley site average and NOAA’s 1991–2020 climate normal.';if(note)note.textContent='NOAA normal: Hoquiam Bowerman Airport, 1991–2020 U.S. Climate Normals. The Brambley comparison remains the 2020–2025 site average.';}}
+catch(e){console.error('NOAA rainfall chart:',e)}
 
-/* Solar layout cleanup. */
 try{const solar=root.querySelector('.brw-solar'),grid=solar?.querySelector('.brw-solargrid'),history=solar?.querySelector('.brw-solarhistory'),seasonal=solar?.querySelector('.brw-seasonal');if(grid)grid.remove();if(history&&seasonal)history.before(seasonal);const seasonalHead=seasonal?.querySelector('.brw-subhead');if(seasonalHead)seasonalHead.remove();const daily=history?.querySelector('.brw-subhead small');if(daily){daily.style.color='#4f6238';daily.style.opacity='1';}}
 catch(e){console.error('Solar layout:',e)}
 })();
