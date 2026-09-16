@@ -41,7 +41,7 @@ jobs:
           AMBIENT_API_KEY: ${{ secrets.AMBIENT_API_KEY }}
           AMBIENT_APPLICATION_KEY: ${{ secrets.AMBIENT_APPLICATION_KEY }}
           AMBIENT_DEVICE_MAC: ${{ secrets.AMBIENT_DEVICE_MAC }}
-        run: python scripts/collect_weather.py
+        run: python scripts/run_collector.py
 
       - name: Commit updated weather data
         run: |
