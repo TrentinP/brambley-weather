@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-09-16T02:25:04.020070Z",
+  "generated_at_utc": "2026-09-16T03:55:23.533535Z",
   "units": "kWh/m\u00b2",
   "daily": [
     {
@@ -14,7 +14,7 @@
     },
     {
       "date": "2026-09-15",
-      "kwh_m2": 2.193,
+      "kwh_m2": 2.194,
       "complete": false
     }
   ],
@@ -22,92 +22,594 @@
     {
       "month": 1,
       "month_name": "January",
-      "average_daily_kwh_m2": null,
-      "days_observed": 0,
-      "eligible": false
+      "average_daily_kwh_m2": 0.49,
+      "days_observed": 183,
+      "eligible": true
     },
     {
       "month": 2,
       "month_name": "February",
-      "average_daily_kwh_m2": null,
-      "days_observed": 0,
-      "eligible": false
+      "average_daily_kwh_m2": 0.929,
+      "days_observed": 198,
+      "eligible": true
     },
     {
       "month": 3,
       "month_name": "March",
-      "average_daily_kwh_m2": null,
-      "days_observed": 0,
-      "eligible": false
+      "average_daily_kwh_m2": 1.7,
+      "days_observed": 217,
+      "eligible": true
     },
     {
       "month": 4,
       "month_name": "April",
-      "average_daily_kwh_m2": null,
-      "days_observed": 0,
-      "eligible": false
+      "average_daily_kwh_m2": 3.069,
+      "days_observed": 209,
+      "eligible": true
     },
     {
       "month": 5,
       "month_name": "May",
-      "average_daily_kwh_m2": null,
-      "days_observed": 0,
-      "eligible": false
+      "average_daily_kwh_m2": 3.678,
+      "days_observed": 216,
+      "eligible": true
     },
     {
       "month": 6,
       "month_name": "June",
-      "average_daily_kwh_m2": null,
-      "days_observed": 0,
-      "eligible": false
+      "average_daily_kwh_m2": 4.144,
+      "days_observed": 210,
+      "eligible": true
     },
     {
       "month": 7,
       "month_name": "July",
-      "average_daily_kwh_m2": null,
-      "days_observed": 0,
-      "eligible": false
+      "average_daily_kwh_m2": 4.332,
+      "days_observed": 185,
+      "eligible": true
     },
     {
       "month": 8,
       "month_name": "August",
-      "average_daily_kwh_m2": null,
-      "days_observed": 0,
-      "eligible": false
+      "average_daily_kwh_m2": 3.453,
+      "days_observed": 211,
+      "eligible": true
     },
     {
       "month": 9,
       "month_name": "September",
-      "average_daily_kwh_m2": 0.0,
-      "days_observed": 2,
-      "eligible": false
+      "average_daily_kwh_m2": 2.223,
+      "days_observed": 177,
+      "eligible": true
     },
     {
       "month": 10,
       "month_name": "October",
-      "average_daily_kwh_m2": null,
-      "days_observed": 0,
-      "eligible": false
+      "average_daily_kwh_m2": 1.161,
+      "days_observed": 183,
+      "eligible": true
     },
     {
       "month": 11,
       "month_name": "November",
-      "average_daily_kwh_m2": null,
-      "days_observed": 0,
-      "eligible": false
+      "average_daily_kwh_m2": 0.554,
+      "days_observed": 176,
+      "eligible": true
     },
     {
       "month": 12,
       "month_name": "December",
-      "average_daily_kwh_m2": null,
-      "days_observed": 0,
-      "eligible": false
+      "average_daily_kwh_m2": 0.436,
+      "days_observed": 184,
+      "eligible": true
     }
   ],
   "seasonal_records": {
     "minimum_complete_days_per_month": 20,
-    "ready": false,
-    "highest": null,
-    "lowest": null
-  }
+    "ready": true,
+    "highest": {
+      "month": 7,
+      "month_name": "July",
+      "average_daily_kwh_m2": 4.332,
+      "days_observed": 185,
+      "eligible": true
+    },
+    "lowest": {
+      "month": 12,
+      "month_name": "December",
+      "average_daily_kwh_m2": 0.436,
+      "days_observed": 184,
+      "eligible": true
+    },
+    "method": "Weighted average of complete month-level daily solar-energy records from 2020 onward."
+  },
+  "historical_monthly": [
+    {
+      "month": "2020-01",
+      "average_daily_kwh_m2": 1.549,
+      "days_observed": 17,
+      "complete": false
+    },
+    {
+      "month": "2020-02",
+      "average_daily_kwh_m2": 1.243,
+      "days_observed": 29,
+      "complete": true
+    },
+    {
+      "month": "2020-03",
+      "average_daily_kwh_m2": 1.919,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2020-04",
+      "average_daily_kwh_m2": 3.357,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2020-05",
+      "average_daily_kwh_m2": 3.829,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2020-06",
+      "average_daily_kwh_m2": 4.123,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2020-07",
+      "average_daily_kwh_m2": 4.436,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2020-08",
+      "average_daily_kwh_m2": 4.346,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2020-09",
+      "average_daily_kwh_m2": 2.133,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2020-10",
+      "average_daily_kwh_m2": 1.229,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2020-11",
+      "average_daily_kwh_m2": 0.54,
+      "days_observed": 28,
+      "complete": true
+    },
+    {
+      "month": "2020-12",
+      "average_daily_kwh_m2": 0.384,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2021-01",
+      "average_daily_kwh_m2": 0.475,
+      "days_observed": 28,
+      "complete": true
+    },
+    {
+      "month": "2021-02",
+      "average_daily_kwh_m2": 0.832,
+      "days_observed": 28,
+      "complete": true
+    },
+    {
+      "month": "2021-03",
+      "average_daily_kwh_m2": 2.062,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2021-04",
+      "average_daily_kwh_m2": 3.482,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2021-05",
+      "average_daily_kwh_m2": 3.715,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2021-06",
+      "average_daily_kwh_m2": 4.59,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2021-07",
+      "average_daily_kwh_m2": 4.255,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2021-08",
+      "average_daily_kwh_m2": 3.409,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2021-09",
+      "average_daily_kwh_m2": 2.242,
+      "days_observed": 27,
+      "complete": true
+    },
+    {
+      "month": "2021-10",
+      "average_daily_kwh_m2": 1.205,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2021-11",
+      "average_daily_kwh_m2": 0.458,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2021-12",
+      "average_daily_kwh_m2": 0.381,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2022-01",
+      "average_daily_kwh_m2": 0.533,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2022-02",
+      "average_daily_kwh_m2": 0.999,
+      "days_observed": 28,
+      "complete": true
+    },
+    {
+      "month": "2022-03",
+      "average_daily_kwh_m2": 1.669,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2022-04",
+      "average_daily_kwh_m2": 3.008,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2022-05",
+      "average_daily_kwh_m2": 3.251,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2022-06",
+      "average_daily_kwh_m2": 3.65,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2022-07",
+      "average_daily_kwh_m2": 4.391,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2022-08",
+      "average_daily_kwh_m2": 3.517,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2022-09",
+      "average_daily_kwh_m2": 2.352,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2022-10",
+      "average_daily_kwh_m2": 1.203,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2022-11",
+      "average_daily_kwh_m2": 0.604,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2022-12",
+      "average_daily_kwh_m2": 0.413,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2023-01",
+      "average_daily_kwh_m2": 0.48,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2023-02",
+      "average_daily_kwh_m2": 0.968,
+      "days_observed": 28,
+      "complete": true
+    },
+    {
+      "month": "2023-03",
+      "average_daily_kwh_m2": 1.781,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2023-04",
+      "average_daily_kwh_m2": 2.747,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2023-05",
+      "average_daily_kwh_m2": 4.223,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2023-06",
+      "average_daily_kwh_m2": 4.514,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2023-07",
+      "average_daily_kwh_m2": 4.893,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2023-08",
+      "average_daily_kwh_m2": 4.123,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2023-09",
+      "average_daily_kwh_m2": 2.415,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2023-10",
+      "average_daily_kwh_m2": 1.056,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2023-11",
+      "average_daily_kwh_m2": 0.552,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2023-12",
+      "average_daily_kwh_m2": 0.391,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2024-01",
+      "average_daily_kwh_m2": 0.415,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2024-02",
+      "average_daily_kwh_m2": 0.757,
+      "days_observed": 29,
+      "complete": true
+    },
+    {
+      "month": "2024-03",
+      "average_daily_kwh_m2": 1.55,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2024-04",
+      "average_daily_kwh_m2": 2.97,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2024-05",
+      "average_daily_kwh_m2": 3.595,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2024-06",
+      "average_daily_kwh_m2": 3.81,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2024-07",
+      "average_daily_kwh_m2": 4.149,
+      "days_observed": 7,
+      "complete": false
+    },
+    {
+      "month": "2024-08",
+      "average_daily_kwh_m2": 2.491,
+      "days_observed": 25,
+      "complete": true
+    },
+    {
+      "month": "2024-09",
+      "average_daily_kwh_m2": 2.006,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2024-10",
+      "average_daily_kwh_m2": 1.169,
+      "days_observed": 29,
+      "complete": true
+    },
+    {
+      "month": "2024-11",
+      "average_daily_kwh_m2": 0.617,
+      "days_observed": 28,
+      "complete": true
+    },
+    {
+      "month": "2024-12",
+      "average_daily_kwh_m2": 0.394,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2025-01",
+      "average_daily_kwh_m2": 0.583,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2025-02",
+      "average_daily_kwh_m2": 0.823,
+      "days_observed": 28,
+      "complete": true
+    },
+    {
+      "month": "2025-03",
+      "average_daily_kwh_m2": 1.43,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2025-04",
+      "average_daily_kwh_m2": 3.081,
+      "days_observed": 29,
+      "complete": true
+    },
+    {
+      "month": "2025-05",
+      "average_daily_kwh_m2": 3.589,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2025-06",
+      "average_daily_kwh_m2": 4.232,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2025-07",
+      "average_daily_kwh_m2": 4.151,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2025-08",
+      "average_daily_kwh_m2": 2.991,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2025-09",
+      "average_daily_kwh_m2": 2.193,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2025-10",
+      "average_daily_kwh_m2": 1.108,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2025-11",
+      "average_daily_kwh_m2": 0.555,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2025-12",
+      "average_daily_kwh_m2": 0.648,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2026-01",
+      "average_daily_kwh_m2": 0.45,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2026-02",
+      "average_daily_kwh_m2": 0.873,
+      "days_observed": 28,
+      "complete": true
+    },
+    {
+      "month": "2026-03",
+      "average_daily_kwh_m2": 1.486,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2026-04",
+      "average_daily_kwh_m2": 2.837,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2026-05",
+      "average_daily_kwh_m2": 3.55,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2026-06",
+      "average_daily_kwh_m2": 4.089,
+      "days_observed": 30,
+      "complete": true
+    },
+    {
+      "month": "2026-07",
+      "average_daily_kwh_m2": 3.866,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2026-08",
+      "average_daily_kwh_m2": 3.106,
+      "days_observed": 31,
+      "complete": true
+    },
+    {
+      "month": "2026-09",
+      "average_daily_kwh_m2": 2.235,
+      "days_observed": 14,
+      "complete": false
+    }
+  ],
+  "historical_method": "Historical daily energy is derived from Ambient Weather daily mean solar radiation: mean W/m\u00b2 \u00d7 24 h \u00f7 1000. Month points are averages of those daily energy values."
 }
