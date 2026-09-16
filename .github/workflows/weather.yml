@@ -43,6 +43,9 @@ jobs:
           AMBIENT_DEVICE_MAC: ${{ secrets.AMBIENT_DEVICE_MAC }}
         run: python scripts/run_collector.py
 
+      - name: Add historical solar resource
+        run: python scripts/enrich_solar_resource.py
+
       - name: Commit updated weather data
         run: |
           if git diff --quiet -- data/; then
