@@ -1,164 +1,83 @@
-<!-- Brambley Weather Station: paste into a Squarespace Code Block -->
+<!-- Brambley Weather Station: paste this single block into Squarespace -->
 <div id="brambley-weather" class="brw">
-  <section class="brw-current">
-    <div class="brw-title">
-      <div><span>BRAMBLEY OBSERVATORY</span><h2>Weather Station</h2><p>Grays Harbor, Washington</p></div>
-      <div class="brw-live"><i></i><span id="brw-status">Loading station</span></div>
-    </div>
-    <div class="brw-now">
-      <div class="brw-tempblock"><strong id="brw-temp">--</strong><span id="brw-feels">Feels like --</span></div>
-      <div class="brw-metrics">
-        <div><small>Humidity</small><b id="brw-humidity">--</b></div><div><small>Dew point</small><b id="brw-dew">--</b></div><div><small>Pressure</small><b id="brw-pressure">--</b></div><div><small>Wind</small><b id="brw-wind">--</b></div><div><small>Gust</small><b id="brw-gust">--</b></div><div><small>Rain today</small><b id="brw-rain">--</b></div><div><small>Solar irradiance</small><b id="brw-solar">--</b></div><div><small>UV index</small><b id="brw-uv">--</b></div>
-      </div>
-    </div>
-    <div class="brw-strip"><div><small>Peak gust today</small><b id="brw-peak">--</b></div><div><small>Rain this month</small><b id="brw-monthrain">--</b></div><div><small>Observation</small><b id="brw-time">--</b></div></div>
-  </section>
-
-  <section class="brw-section">
-    <div class="brw-sectionhead"><div><span>RECENT CONDITIONS</span><h3>Today at Brambley</h3></div><p>Five-minute station observations are used to build the daily record and solar-energy total.</p></div>
-    <div class="brw-cards">
-      <article><small>Temperature</small><strong id="brw-daytemp">Loading today’s record</strong><p id="brw-daytemp-mean">High, low and mean update throughout the day.</p></article>
-      <article><small>Rainfall</small><strong id="brw-dayrain">--</strong><p>Observed precipitation since local midnight.</p></article>
-      <article><small>Solar resource</small><strong id="brw-dayenergy">Loading today’s record</strong><p>Integrated solar energy since local midnight.</p></article>
-    </div>
-  </section>
-
-  <section class="brw-section">
-    <div class="brw-sectionhead"><div><span>CLIMATE AT BRAMBLEY</span><h3>Historical Temperatures</h3></div><p>Monthly observations extend back to 2007.</p></div>
-    <div class="brw-range" id="brw-temp-range" aria-label="Historical temperature time range"><button type="button" data-years="1">1 year</button><button type="button" data-years="5" class="active">5 years</button><button type="button" data-years="10">10 years</button><button type="button" data-years="all">All</button></div>
-    <div class="brw-chart"><canvas id="brw-temp-chart"></canvas></div>
-  </section>
-
-  <section class="brw-section">
-    <div class="brw-sectionhead"><div><span>PRECIPITATION</span><h3>Monthly Rainfall</h3></div><p>Observed monthly rainfall compared with the Brambley 2020–2025 monthly average.</p></div>
-    <div class="brw-chart"><canvas id="brw-rain-chart"></canvas></div>
-    <p class="brw-note">The comparison line is a six-year Brambley site average, not a NOAA 30-year climate normal.</p>
-  </section>
-
-  <section class="brw-section brw-solar">
-    <div class="brw-sectionhead"><div><span>SOLAR &amp; LIGHT</span><h3>Observed Solar Resource</h3></div><p>Site-specific observations for understanding the practical solar resource at Brambley.</p></div>
-    <div class="brw-solargrid">
-      <article><small>Current irradiance</small><strong id="brw-solar2">--</strong><p>Instantaneous solar radiation measured at the station.</p></article>
-      <article><small>Today’s solar energy</small><strong id="brw-energy2">Loading</strong><p>Integrated from five-minute observations since local midnight.</p></article>
-    </div>
-
-    <div class="brw-solarhistory">
-      <div class="brw-subhead"><div><small>DAILY SOLAR ENERGY</small><h4>Solar energy over time</h4></div><p>Total observed solar energy received each day in kWh/m².</p></div>
-      <div class="brw-range" id="brw-solar-range" aria-label="Solar energy time range"><button type="button" data-years="1" class="active">1 year</button><button type="button" data-years="5">5 years</button><button type="button" data-years="10">10 years</button><button type="button" data-years="all">All</button></div>
-      <div class="brw-chart brw-solar-chart"><canvas id="brw-solar-chart"></canvas></div>
-      <p class="brw-note" id="brw-solar-note">The daily solar archive begins with the current five-minute observation record.</p>
-    </div>
-
-    <div class="brw-seasonal">
-      <div class="brw-subhead"><div><small>SEASONAL SOLAR RESOURCE</small><h4>Across the calendar year</h4></div><p>Average daily solar energy for each calendar month, calculated from complete observed days.</p></div>
-      <div class="brw-recordgrid">
-        <article><small>Highest average daily solar energy</small><strong id="brw-solar-highmonth">Building the record</strong><p id="brw-solar-highdetail">Seasonal comparison will appear after sufficient observations accumulate.</p></article>
-        <article><small>Lowest average daily solar energy</small><strong id="brw-solar-lowmonth">Building the record</strong><p id="brw-solar-lowdetail">At least 20 complete daily records are required for a calendar month.</p></article>
-      </div>
-    </div>
-    <p class="brw-note">The station sensor provides useful local observations, but it is not represented here as a calibrated utility-grade pyranometer or formal photovoltaic site assessment.</p>
-  </section>
-
-  <div class="brw-archive">
-    <div><span>WEATHER DATA ARCHIVE</span><h3>Explore the observations</h3><p>Historical daily weather records are available from January 2020 onward, with monthly temperature records extending to 2007.</p></div>
-    <a href="/weather-data-archive">Open Weather Archive →</a>
+<section class="brw-current">
+  <div class="brw-title">
+    <div><span>BRAMBLEY OBSERVATORY</span><h2>Weather Station</h2><p>Grays Harbor, Washington</p></div>
+    <div><div class="brw-live"><i></i><span id="brw-status">Loading station</span></div><div class="brw-lastobs"><small>Last observation</small><span id="brw-time">--</span></div></div>
   </div>
-  <div class="brw-return"><a href="/observatory">← Return to Brambley Observatory</a></div>
+  <div class="brw-now">
+    <div class="brw-tempblock"><strong id="brw-temp">--</strong><span id="brw-feels">Feels like --</span><div class="brw-temp-summary"><strong id="brw-daytemp">High -- · Low --</strong><br><span id="brw-daytemp-mean">Mean --</span></div></div>
+    <div class="brw-metrics">
+      <div><small>Wind</small><b id="brw-wind">--</b></div><div><small>Gust</small><b id="brw-gust">--</b></div><div><small>Humidity</small><b id="brw-humidity">--</b></div>
+      <div><small>Rain today</small><b id="brw-rain">--</b></div><div><small>Rain rate</small><b id="brw-rainrate">--</b></div><div><small>Dew point</small><b id="brw-dew">--</b></div>
+      <div><small>Pressure</small><b id="brw-pressure">--</b></div><div><small>Solar irradiance</small><b id="brw-solar">--</b></div><div><small>UV index</small><b id="brw-uv">--</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="brw-section">
+  <div class="brw-sectionhead"><div><span>RECENT CONDITIONS</span><h3>Today at Brambley</h3></div></div>
+  <div class="brw-todaycharts">
+    <div class="brw-mini-chart"><small>RAINFALL RATE</small><h4>Rain through the day</h4><div class="brw-mini-canvas"><canvas id="brw-rainrate-chart"></canvas></div></div>
+    <div class="brw-mini-chart"><small>BAROGRAPH</small><h4>Pressure through the day</h4><div class="brw-mini-canvas"><canvas id="brw-pressure-chart"></canvas></div></div>
+    <div class="brw-mini-chart"><small>HUMIDITY</small><h4>Humidity through the day</h4><div class="brw-mini-canvas"><canvas id="brw-humidity-chart"></canvas></div></div>
+  </div>
+</section>
+
+<section class="brw-section">
+  <div class="brw-sectionhead"><div><span>CLIMATE AT BRAMBLEY</span><h3>Historical Temperatures</h3></div><p>Monthly observations extend back to 2007.</p></div>
+  <div class="brw-range" id="brw-temp-range"><button data-years="1">1 year</button><button data-years="5" class="active">5 years</button><button data-years="10">10 years</button><button data-years="all">All</button></div>
+  <div class="brw-chart"><canvas id="brw-temp-chart"></canvas></div>
+</section>
+
+<section class="brw-section">
+  <div class="brw-sectionhead"><div><span>PRECIPITATION</span><h3>Monthly Rainfall</h3></div><p>Observed monthly rainfall compared with the Brambley site average and NOAA’s 1991–2020 climate normal.</p></div>
+  <div class="brw-chart"><canvas id="brw-rain-chart"></canvas></div>
+  <p class="brw-note">NOAA normal: Hoquiam Bowerman Airport, 1991–2020 U.S. Climate Normals. The Brambley comparison remains the 2020–2025 site average.</p>
+</section>
+
+<section class="brw-section brw-solar">
+  <div class="brw-sectionhead"><div><span>SOLAR &amp; LIGHT</span><h3>Observed Solar Resource</h3></div><p>Site-specific observations for understanding the practical solar resource at Brambley.</p></div>
+  <div class="brw-seasonal"><div class="brw-recordgrid">
+    <article><small>Highest average daily solar energy</small><strong id="brw-solar-highmonth">Building the record</strong><p id="brw-solar-highdetail">Seasonal comparison will appear after sufficient observations accumulate.</p></article>
+    <article><small>Lowest average daily solar energy</small><strong id="brw-solar-lowmonth">Building the record</strong><p id="brw-solar-lowdetail">At least 20 complete daily records are required for a calendar month.</p></article>
+  </div></div>
+  <div class="brw-solarhistory">
+    <div class="brw-subhead"><div><small>DAILY SOLAR ENERGY</small><h4>Solar energy over time</h4></div><p>Total observed solar energy received each day in kWh/m².</p></div>
+    <div class="brw-range" id="brw-solar-range"><button data-years="1" class="active">1 year</button><button data-years="5">5 years</button><button data-years="10">10 years</button><button data-years="all">All</button></div>
+    <div class="brw-chart brw-solar-chart"><canvas id="brw-solar-chart"></canvas></div>
+    <p class="brw-note" id="brw-solar-note">The daily solar archive begins with the historical station record.</p>
+  </div>
+  <p class="brw-note">The station sensor provides useful local observations, but it is not represented here as a calibrated utility-grade pyranometer or formal photovoltaic site assessment.</p>
+</section>
+
+<div class="brw-archive"><div><span>WEATHER DATA ARCHIVE</span><h3>Explore the observations</h3><p>Historical daily weather records are available from January 2020 onward, with monthly temperature records extending to 2007.</p></div><a href="/weather-data-archive">Open Weather Archive →</a></div>
+<div class="brw-return"><a href="/observatory">← Return to Brambley Observatory</a></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
-.brw{--bg:#171916;--panel:#20231e;--line:rgba(255,255,255,.18);--text:#f6f4ec;--muted:#d1cfc6;--accent:#c7d3a8;--section-accent:#4f6238;font-family:inherit;color:var(--text);max-width:1200px;margin:auto}.brw *{box-sizing:border-box}.brw-current{background:var(--bg);border:1px solid var(--line);padding:30px}.brw-title,.brw-sectionhead,.brw-archive,.brw-subhead{display:flex;justify-content:space-between;gap:30px}.brw-title>div>span{font-size:11px;letter-spacing:.18em;color:var(--accent);font-weight:700}.brw-sectionhead span,.brw-archive span,.brw-subhead small{font-size:12px;letter-spacing:.16em;color:var(--section-accent);font-weight:800}.brw h2,.brw h3,.brw h4{font-weight:400;margin:6px 0}.brw h2{font-size:38px}.brw h3{font-size:29px}.brw h4{font-size:24px}.brw-title p,.brw-sectionhead p,.brw-subhead p,.brw-note,.brw article p,.brw-archive p{font-size:15px;line-height:1.6;margin:5px 0}.brw-title p{color:var(--muted)}.brw-live{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}.brw-live i{width:8px;height:8px;background:var(--accent);border-radius:50%}.brw-now{display:grid;grid-template-columns:.7fr 2fr;gap:32px;padding:30px 0}.brw-tempblock{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;min-width:0}.brw-tempblock #brw-temp{display:block!important;position:static!important;margin:0!important;padding:0!important;font-size:80px!important;line-height:.92!important;font-weight:300!important;letter-spacing:-.05em!important;white-space:nowrap}.brw-tempblock #brw-feels{display:block!important;position:static!important;margin:14px 0 0!important;padding:0!important;line-height:1.35!important;color:var(--muted)!important;font-size:15px!important;white-space:normal}.brw-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}.brw-metrics div{background:var(--panel);padding:15px;min-height:86px;display:flex;flex-direction:column;justify-content:space-between}.brw small{color:var(--muted);font-size:13px}.brw b{font-weight:500;font-size:16px}.brw-strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}.brw-strip div{padding:17px 12px;display:flex;justify-content:space-between;gap:16px}.brw-strip div+div{border-left:1px solid var(--line)}.brw-section{padding:55px 0;border-bottom:1px solid #cbc9bf;color:#292b27}.brw-sectionhead{align-items:flex-end;margin-bottom:25px}.brw-sectionhead p,.brw-subhead p{max-width:440px;color:#53554e}.brw-cards,.brw-solargrid,.brw-recordgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.brw-solargrid,.brw-recordgrid{grid-template-columns:repeat(2,1fr)}.brw article{border:1px solid #cbc9bf;padding:22px;min-height:135px}.brw article strong{display:block;font-size:24px;font-weight:400;margin:9px 0}.brw article small{color:#55584f;font-weight:600}.brw article p,.brw-note{color:#55584f}.brw-range{display:flex;justify-content:flex-end;gap:6px;margin:-8px 0 16px}.brw-range button{appearance:none;border:1px solid #a9aa9f;background:#f7f5ee;color:#3d4038;padding:7px 12px;border-radius:2px;font:600 12px/1 inherit;cursor:pointer}.brw-range button:hover{background:#ece9df}.brw-range button.active{background:#4f6238;border-color:#4f6238;color:#fff}.brw-chart{height:390px;position:relative}.brw-solarhistory,.brw-seasonal{margin-top:48px;padding-top:38px;border-top:1px solid #cbc9bf}.brw-subhead{align-items:flex-end;margin-bottom:22px}.brw-solarhistory .brw-range{margin-top:0}.brw-solar-chart{height:340px}.brw-archive{background:#eceae1;color:#292b27;padding:32px;margin-top:55px;align-items:center}.brw-archive p{color:#50534c;max-width:650px}.brw-archive a,.brw-return a{color:#292b27;text-decoration:none;border-bottom:1px solid #292b27;padding-bottom:3px;white-space:nowrap;font-weight:600}.brw-note{margin-top:15px}.brw-solar{border-bottom:0}.brw-return{padding:25px 0 5px;text-align:center;color:#292b27}.brw-return a{font-size:13px;letter-spacing:.04em}
-@media(max-width:800px){.brw-now{grid-template-columns:1fr}.brw-metrics{grid-template-columns:repeat(2,1fr)}.brw-title,.brw-sectionhead,.brw-archive,.brw-subhead{flex-direction:column;align-items:flex-start}.brw-cards,.brw-recordgrid{grid-template-columns:1fr}.brw-chart{height:330px}.brw-range{justify-content:flex-start;margin-top:0}}@media(max-width:520px){.brw-current{padding:20px}.brw-tempblock #brw-temp{font-size:64px!important}.brw-strip{grid-template-columns:1fr}.brw-strip div+div{border-left:0;border-top:1px solid var(--line)}.brw-solargrid{grid-template-columns:1fr}.brw-range{flex-wrap:wrap}.brw-solar-chart{height:300px}}
+.brw{--bg:#171916;--panel:#20231e;--line:rgba(255,255,255,.18);--text:#f6f4ec;--muted:#d1cfc6;--accent:#c7d3a8;--section-accent:#4f6238;font-family:inherit;color:var(--text);max-width:1200px;margin:auto}.brw *{box-sizing:border-box}.brw-current{background:var(--bg);border:1px solid var(--line);padding:30px}.brw-title,.brw-sectionhead,.brw-archive,.brw-subhead{display:flex;justify-content:space-between;gap:30px}.brw-title>div>span{font-size:11px;letter-spacing:.18em;color:var(--accent);font-weight:700}.brw-sectionhead span,.brw-archive span,.brw-subhead small{font-size:12px;letter-spacing:.16em;color:var(--section-accent);font-weight:800}.brw h2,.brw h3,.brw h4{font-weight:400;margin:6px 0}.brw h2{font-size:38px}.brw h3{font-size:29px}.brw h4{font-size:24px}.brw-title p,.brw-sectionhead p,.brw-subhead p,.brw-note,.brw article p,.brw-archive p{font-size:15px;line-height:1.6;margin:5px 0}.brw-title p{color:var(--muted)}.brw-live{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}.brw-live i{width:8px;height:8px;background:var(--accent);border-radius:50%}.brw-lastobs{margin-top:14px;color:var(--muted);font-size:12px;line-height:1.4}.brw-lastobs small{display:block;font-size:10px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:2px}.brw-now{display:grid;grid-template-columns:.7fr 2fr;gap:32px;padding:30px 0 0}.brw-tempblock{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-width:0}.brw-tempblock #brw-temp{display:block;margin:0;padding:0;font-size:80px;line-height:.92;font-weight:300;letter-spacing:-.05em;white-space:nowrap}.brw-tempblock #brw-feels{display:block;margin:14px 0 0;line-height:1.35;color:var(--muted);font-size:15px}.brw-temp-summary{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.5}.brw-temp-summary strong{font-size:13px;font-weight:500;color:var(--text)}.brw-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}.brw-metrics div{background:var(--panel);padding:15px;min-height:86px;display:flex;flex-direction:column;justify-content:space-between}.brw small{color:var(--muted);font-size:13px}.brw b{font-weight:500;font-size:16px}.brw-section{padding:55px 0;border-bottom:1px solid #cbc9bf;color:#292b27}.brw-sectionhead{align-items:flex-end;margin-bottom:25px}.brw-sectionhead p,.brw-subhead p{max-width:440px;color:#53554e}.brw-todaycharts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px}.brw-mini-chart{border:1px solid #cbc9bf;padding:15px 14px 12px;min-width:0}.brw-mini-chart small{display:block;color:#4f6238!important;font-size:10px;letter-spacing:.13em;font-weight:800;margin-bottom:2px}.brw-mini-chart h4{font-size:18px;margin:0 0 7px}.brw-mini-canvas{height:140px;position:relative}.brw-recordgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.brw article{border:1px solid #cbc9bf;padding:22px;min-height:135px}.brw article strong{display:block;font-size:24px;font-weight:400;margin:9px 0}.brw article small{color:#55584f;font-weight:600}.brw article p,.brw-note{color:#55584f}.brw-range{display:flex;justify-content:flex-end;gap:6px;margin:-8px 0 16px}.brw-range button{appearance:none;border:1px solid #a9aa9f;background:#f7f5ee;color:#3d4038;padding:7px 12px;border-radius:2px;font:600 12px/1 inherit;cursor:pointer}.brw-range button:hover{background:#ece9df}.brw-range button.active{background:#4f6238;border-color:#4f6238;color:#fff}.brw-chart{height:390px;position:relative}.brw-seasonal{margin:0 0 30px}.brw-solarhistory{margin-top:0;padding-top:30px}.brw-subhead{align-items:flex-end;margin-bottom:22px}.brw-subhead small{color:#4f6238!important;opacity:1}.brw-solarhistory .brw-range{margin-top:0}.brw-solar-chart{height:340px}.brw-archive{background:#eceae1;color:#292b27;padding:32px;margin-top:55px;align-items:center}.brw-archive p{color:#50534c;max-width:650px}.brw-archive a,.brw-return a{color:#292b27;text-decoration:none;border-bottom:1px solid #292b27;padding-bottom:3px;white-space:nowrap;font-weight:600}.brw-note{margin-top:15px}.brw-solar{border-bottom:0}.brw-return{padding:25px 0 5px;text-align:center;color:#292b27}.brw-return a{font-size:13px;letter-spacing:.04em}
+@media(max-width:800px){.brw-now{grid-template-columns:1fr}.brw-metrics{grid-template-columns:repeat(3,1fr)}.brw-title,.brw-sectionhead,.brw-archive,.brw-subhead{flex-direction:column;align-items:flex-start}.brw-todaycharts,.brw-recordgrid{grid-template-columns:1fr}.brw-mini-canvas{height:155px}.brw-chart{height:330px}.brw-range{justify-content:flex-start;margin-top:0}}@media(max-width:560px){.brw-current{padding:20px}.brw-tempblock #brw-temp{font-size:64px}.brw-metrics{grid-template-columns:repeat(2,1fr)}.brw-range{flex-wrap:wrap}.brw-solar-chart{height:300px}}
 </style>
 <script>
 (async()=>{
-const RAW='https://raw.githubusercontent.com/TrentinP/brambley-weather/main/';
-const $=id=>document.getElementById(id);
-const n=(v,d=1)=>v==null?'--':Number(v).toFixed(d);
-const num=v=>v==null||v===''?null:(Number.isFinite(Number(v))?Number(v):null);
+const RAW='https://raw.githubusercontent.com/TrentinP/brambley-weather/main/',$=id=>document.getElementById(id),num=v=>v==null||v===''?null:(Number.isFinite(Number(v))?Number(v):null),n=(v,d=1)=>num(v)==null?'--':Number(v).toFixed(d);
 async function text(path){const r=await fetch(RAW+path+'?v='+Date.now());if(!r.ok)throw Error(path);return r.text()}
 function csv(s){const [h,...rs]=s.trim().split(/\r?\n/).map(x=>x.split(','));return rs.map(r=>Object.fromEntries(h.map((k,i)=>[k,r[i]])))}
+function clock(s){return new Date(s).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})}
+let current;
+try{current=JSON.parse(await text('data/current.json'));const m=current.measurements||{},today=current.today||{};$('brw-temp').textContent=n(m.temperature_c)+'°C';$('brw-feels').textContent='Feels like '+n(m.feels_like_c)+'°C';$('brw-daytemp').textContent='High '+n(today.temperature_high_c)+'°C · Low '+n(today.temperature_low_c)+'°C';$('brw-daytemp-mean').textContent='Mean '+n(today.temperature_mean_c)+'°C';$('brw-wind').textContent=n(m.wind_speed_kn)+' kn '+(m.wind_direction_compass||'');$('brw-gust').textContent=n(m.wind_gust_kn)+' kn';$('brw-humidity').textContent=n(m.humidity_pct,0)+'%';$('brw-rain').textContent=n(m.rain_daily_mm)+' mm';$('brw-rainrate').textContent=n(m.rain_rate_mm_hr)+' mm/hr';$('brw-dew').textContent=n(m.dew_point_c)+'°C';$('brw-pressure').textContent=n(m.pressure_relative_hpa)+' hPa';$('brw-solar').textContent=n(m.solar_radiation_w_m2,0)+' W/m²';$('brw-uv').textContent=n(m.uv_index);$('brw-time').textContent=current.observed_at_local?clock(current.observed_at_local):'--';$('brw-status').textContent=(Date.now()-new Date(current.observed_at_utc)<20*60000)?'Station online':'Data delayed';}catch(e){$('brw-status').textContent='Data unavailable';console.error(e)}
 
-try{
-  const d=JSON.parse(await text('data/current.json')),m=d.measurements||{},today=d.today||{};
-  $('brw-temp').textContent=n(m.temperature_c)+'°C';
-  $('brw-feels').textContent='Feels like '+n(m.feels_like_c)+'°C';
-  $('brw-humidity').textContent=n(m.humidity_pct,0)+'%';
-  $('brw-dew').textContent=n(m.dew_point_c)+'°C';
-  $('brw-pressure').textContent=n(m.pressure_relative_hpa)+' hPa';
-  $('brw-wind').textContent=n(m.wind_speed_kn)+' kn '+(m.wind_direction_compass||'');
-  $('brw-gust').textContent=n(m.wind_gust_kn)+' kn';
-  $('brw-rain').textContent=n(m.rain_daily_mm)+' mm';
-  $('brw-solar').textContent=n(m.solar_radiation_w_m2,0)+' W/m²';
-  $('brw-solar2').textContent=n(m.solar_radiation_w_m2,0)+' W/m²';
-  $('brw-uv').textContent=n(m.uv_index);
-  $('brw-peak').textContent=n(m.max_daily_gust_kn)+' kn';
-  $('brw-monthrain').textContent=n(m.rain_monthly_mm)+' mm';
-  $('brw-dayrain').textContent=n(m.rain_daily_mm)+' mm';
+try{const stamp=current?.observed_at_local||new Date().toISOString(),day=stamp.slice(0,10),ym=day.slice(0,7),rows=csv(await text('data/observations/'+ym+'.csv')).filter(r=>(r.timestamp_local||'').slice(0,10)===day),labels=rows.map(r=>clock(r.timestamp_local)),axis={x:{ticks:{maxTicksLimit:4,color:'#51534c',font:{size:9}},grid:{display:false}}};
+new Chart($('brw-rainrate-chart'),{type:'line',data:{labels,datasets:[{data:rows.map(r=>num(r.rain_rate_mm_hr)),borderColor:'#55728a',backgroundColor:'rgba(85,114,138,.12)',fill:true,borderWidth:1.6,pointRadius:0,tension:.15}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{...axis,y:{beginAtZero:true,title:{display:true,text:'mm/hr'},ticks:{maxTicksLimit:5}}}}});
+const ps=rows.map(r=>num(r.pressure_relative_hpa)).filter(v=>v!==null),pmin=ps.length?Math.floor(Math.min(...ps)-1):980,pmax=ps.length?Math.ceil(Math.max(...ps)+1):1040;new Chart($('brw-pressure-chart'),{type:'line',data:{labels,datasets:[{data:rows.map(r=>num(r.pressure_relative_hpa)),borderColor:'#5f6658',borderWidth:1.6,pointRadius:0,tension:.2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{...axis,y:{min:pmin,max:pmax,title:{display:true,text:'hPa'},ticks:{maxTicksLimit:5}}}}});
+new Chart($('brw-humidity-chart'),{type:'line',data:{labels,datasets:[{data:rows.map(r=>num(r.humidity_pct)),borderColor:'#66808a',backgroundColor:'rgba(102,128,138,.08)',fill:true,borderWidth:1.6,pointRadius:0,tension:.2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{...axis,y:{min:0,max:100,title:{display:true,text:'%'},ticks:{maxTicksLimit:5}}}}});}catch(e){console.error('Intraday charts:',e)}
 
-  if(num(today.temperature_high_c)!==null&&num(today.temperature_low_c)!==null){
-    $('brw-daytemp').textContent='High '+n(today.temperature_high_c)+'°C · Low '+n(today.temperature_low_c)+'°C';
-    $('brw-daytemp-mean').textContent='Mean '+n(today.temperature_mean_c)+'°C · Updated throughout the day.';
-  }
-  if(num(today.solar_energy_kwh_m2)!==null){
-    const energy=n(today.solar_energy_kwh_m2,2)+' kWh/m²';
-    $('brw-dayenergy').textContent=energy;
-    $('brw-energy2').textContent=energy;
-  }
+try{const all=csv(await text('data/historical/monthly_temperature_2007_2026.csv'));let chart;function render(range){const rows=range==='all'?all:all.slice(-12*Number(range)),rh=rows.map(x=>num(x.max_c)),ah=rows.map(x=>num(x.avg_high_c)),al=rows.map(x=>num(x.avg_low_c)),rl=rows.map(x=>num(x.min_c)),vals=[...rh,...ah,...al,...rl].filter(v=>v!==null),lo=Math.floor(Math.min(...vals)/5)*5-5,hi=Math.ceil(Math.max(...vals)/5)*5+5,data={labels:rows.map(x=>x.month),datasets:[{label:'Record high',data:rh,borderColor:'#a43b32',backgroundColor:'#a43b32',borderWidth:1.5,pointRadius:0},{label:'Average high',data:ah,borderColor:'#d28a3a',backgroundColor:'#d28a3a',borderWidth:2.5,pointRadius:0},{label:'Average low',data:al,borderColor:'#5683a6',backgroundColor:'#5683a6',borderWidth:2.5,pointRadius:0},{label:'Record low',data:rl,borderColor:'#315b85',backgroundColor:'#315b85',borderWidth:1.5,pointRadius:0}]};if(chart){chart.data=data;chart.options.scales.y.min=lo;chart.options.scales.y.max=hi;chart.update()}else chart=new Chart($('brw-temp-chart'),{type:'line',data,options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{labels:{color:'#3f413b'}}},scales:{x:{ticks:{maxTicksLimit:10}},y:{min:lo,max:hi,title:{display:true,text:'Temperature (°C)'},ticks:{stepSize:5}}}}})}render('5');$('brw-temp-range').onclick=e=>{const b=e.target.closest('button[data-years]');if(!b)return;$('brw-temp-range').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));render(b.dataset.years)}}catch(e){console.error('Temperature chart:',e)}
 
-  const t=new Date(d.observed_at_local);
-  $('brw-time').textContent=t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'});
-  $('brw-status').textContent=(Date.now()-new Date(d.observed_at_utc)<20*60000)?'Station online':'Data delayed';
-}catch(e){$('brw-status').textContent='Data unavailable';console.error('Brambley current conditions:',e)}
+try{const a=csv(await text('data/historical/monthly_rainfall_2020_2026.csv')),av=csv(await text('data/historical/rainfall_average_2020_2025.csv')),avg=Object.fromEntries(av.map(x=>[Number(x.month),num(x.average_rain_mm)])),normal=[10.91,6.65,7.74,5.35,2.99,2.01,.85,1.35,2.53,6.91,10.95,10.52].map(v=>v*25.4);new Chart($('brw-rain-chart'),{data:{labels:a.map(x=>x.month),datasets:[{type:'bar',label:'Observed rainfall',data:a.map(x=>num(x.monthly_rain_mm)),backgroundColor:'rgba(79,98,56,.62)',borderColor:'#4f6238',borderWidth:1},{type:'line',label:'Brambley average (2020–2025)',data:a.map(x=>avg[Number(x.month.slice(5,7))]),borderColor:'#596451',backgroundColor:'#596451',pointRadius:0,borderWidth:2.2},{type:'line',label:'NOAA normal (1991–2020)',data:a.map(x=>normal[Number(x.month.slice(5,7))-1]),borderColor:'#9b603e',backgroundColor:'#9b603e',borderDash:[8,5],pointRadius:0,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{labels:{color:'#3f413b'}}},scales:{x:{ticks:{maxTicksLimit:14}},y:{beginAtZero:true,title:{display:true,text:'Rainfall (mm)'}}}}})}catch(e){console.error('Rainfall chart:',e)}
 
-try{
-  const all=csv(await text('data/historical/monthly_temperature_2007_2026.csv'));let chart=null;
-  function render(range){
-    const rows=range==='all'?all:all.slice(-12*Number(range));
-    const rh=rows.map(x=>num(x.max_c)),ah=rows.map(x=>num(x.avg_high_c)),al=rows.map(x=>num(x.avg_low_c)),rl=rows.map(x=>num(x.min_c));
-    const vals=[...rh,...ah,...al,...rl].filter(v=>v!==null);if(!vals.length)throw Error('No temperature values');
-    const lo=Math.floor(Math.min(...vals)/5)*5-5,hi=Math.ceil(Math.max(...vals)/5)*5+5;
-    const data={labels:rows.map(x=>x.month),datasets:[{label:'Record high',data:rh,borderWidth:1.5,pointRadius:0,spanGaps:false},{label:'Average high',data:ah,borderWidth:2.5,pointRadius:0,spanGaps:false},{label:'Average low',data:al,borderWidth:2.5,pointRadius:0,spanGaps:false},{label:'Record low',data:rl,borderWidth:1.5,pointRadius:0,spanGaps:false}]};
-    if(chart){chart.data=data;chart.options.scales.y.min=lo;chart.options.scales.y.max=hi;chart.options.scales.x.ticks.maxTicksLimit=range==='1'?12:10;chart.update()}
-    else chart=new Chart($('brw-temp-chart'),{type:'line',data,options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{labels:{color:'#3f413b',font:{size:13}}}},scales:{x:{ticks:{maxTicksLimit:10,color:'#51534c',font:{size:12}},grid:{color:'rgba(60,60,55,.09)'}},y:{min:lo,max:hi,title:{display:true,text:'Temperature (°C)',color:'#3f413b',font:{size:13}},ticks:{color:'#51534c',font:{size:12},stepSize:5},grid:{color:'rgba(60,60,55,.11)'}}}}});
-  }
-  render('5');
-  $('brw-temp-range').addEventListener('click',e=>{const b=e.target.closest('button[data-years]');if(!b)return;$('brw-temp-range').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));render(b.dataset.years)});
-}catch(e){console.error('Brambley temperature chart:',e)}
-
-try{
-  const a=csv(await text('data/historical/monthly_rainfall_2020_2026.csv')),av=csv(await text('data/historical/rainfall_average_2020_2025.csv')),avg=Object.fromEntries(av.map(x=>[Number(x.month),Number(x.average_rain_mm)]));
-  new Chart($('brw-rain-chart'),{data:{labels:a.map(x=>x.month),datasets:[{type:'bar',label:'Observed rainfall',data:a.map(x=>num(x.monthly_rain_mm))},{type:'line',label:'Brambley average (2020–2025)',data:a.map(x=>avg[Number(x.month.slice(5,7))]),pointRadius:0,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{labels:{color:'#3f413b',font:{size:13}}}},scales:{x:{ticks:{maxTicksLimit:14,color:'#51534c',font:{size:12}},grid:{color:'rgba(60,60,55,.09)'}},y:{beginAtZero:true,title:{display:true,text:'Rainfall (mm)',color:'#3f413b',font:{size:13}},ticks:{color:'#51534c',font:{size:12}},grid:{color:'rgba(60,60,55,.11)'}}}}});
-}catch(e){console.error('Brambley rainfall chart:',e)}
-
-try{
-  const solar=JSON.parse(await text('data/solar-resource.json'));
-  /* Old sparse records can contain artificial zero totals. Until the new five-minute
-     archive matures, omit zero-valued completed legacy days from the graph. */
-  const all=(solar.daily||[]).filter(x=>num(x.kwh_m2)!==null&&(!x.complete||Number(x.kwh_m2)>0));
-  let chart=null;
-  function renderSolar(range){
-    let rows=all;
-    if(range!=='all'){
-      const cutoff=new Date();cutoff.setFullYear(cutoff.getFullYear()-Number(range));
-      rows=all.filter(x=>new Date(x.date+'T12:00:00')>=cutoff);
-    }
-    const data={labels:rows.map(x=>x.date),datasets:[{label:'Daily solar energy',data:rows.map(x=>num(x.kwh_m2)),borderWidth:2,pointRadius:rows.length<45?2:0,spanGaps:false,tension:.12}]};
-    if(chart){chart.data=data;chart.options.scales.x.ticks.maxTicksLimit=range==='1'?12:10;chart.update()}
-    else chart=new Chart($('brw-solar-chart'),{type:'line',data,options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+Number(c.raw).toFixed(2)+' kWh/m²'}}},scales:{x:{ticks:{maxTicksLimit:12,color:'#51534c',font:{size:12}},grid:{color:'rgba(60,60,55,.09)'}},y:{beginAtZero:true,title:{display:true,text:'Daily solar energy (kWh/m²)',color:'#3f413b',font:{size:13}},ticks:{color:'#51534c',font:{size:12}},grid:{color:'rgba(60,60,55,.11)'}}}}});
-  }
-  renderSolar('1');
-  $('brw-solar-range').addEventListener('click',e=>{const b=e.target.closest('button[data-years]');if(!b)return;$('brw-solar-range').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));renderSolar(b.dataset.years)});
-
-  const records=solar.seasonal_records||{};
-  if(records.ready&&records.highest&&records.lowest){
-    $('brw-solar-highmonth').textContent=records.highest.month_name;
-    $('brw-solar-highdetail').textContent=n(records.highest.average_daily_kwh_m2,2)+' kWh/m²/day · '+records.highest.days_observed+' complete days observed.';
-    $('brw-solar-lowmonth').textContent=records.lowest.month_name;
-    $('brw-solar-lowdetail').textContent=n(records.lowest.average_daily_kwh_m2,2)+' kWh/m²/day · '+records.lowest.days_observed+' complete days observed.';
-  }
-  if(all.length<7)$('brw-solar-note').textContent='The daily solar-energy record has just begun. The graph will become more informative as complete days accumulate.';
-}catch(e){console.error('Brambley solar resource:',e)}
+try{const solar=JSON.parse(await text('data/solar-resource.json')),all=(solar.daily||[]).filter(x=>num(x.kwh_m2)!==null&&(!x.complete||Number(x.kwh_m2)>0));let chart;function render(range){let rows=all;if(range!=='all'){const cutoff=new Date();cutoff.setFullYear(cutoff.getFullYear()-Number(range));rows=all.filter(x=>new Date(x.date+'T12:00:00')>=cutoff)}const data={labels:rows.map(x=>x.date),datasets:[{label:'Daily solar energy',data:rows.map(x=>num(x.kwh_m2)),borderWidth:2,pointRadius:rows.length<45?2:0,spanGaps:false,tension:.12}]};if(chart){chart.data=data;chart.update()}else chart=new Chart($('brw-solar-chart'),{type:'line',data,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:12}},y:{beginAtZero:true,title:{display:true,text:'Daily solar energy (kWh/m²)'}}}}})}render('1');$('brw-solar-range').onclick=e=>{const b=e.target.closest('button[data-years]');if(!b)return;$('brw-solar-range').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));render(b.dataset.years)};const r=solar.seasonal_records||{};if(r.ready&&r.highest&&r.lowest){$('brw-solar-highmonth').textContent=r.highest.month_name;$('brw-solar-highdetail').textContent=n(r.highest.average_daily_kwh_m2,2)+' kWh/m²/day · '+r.highest.days_observed+' complete days observed.';$('brw-solar-lowmonth').textContent=r.lowest.month_name;$('brw-solar-lowdetail').textContent=n(r.lowest.average_daily_kwh_m2,2)+' kWh/m²/day · '+r.lowest.days_observed+' complete days observed.'}}catch(e){console.error('Solar resource:',e)}
 })();
 </script>
