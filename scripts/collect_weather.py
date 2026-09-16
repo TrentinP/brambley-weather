@@ -24,6 +24,13 @@ MPH_TO_KNOTS = 0.8689762419
 INHG_TO_HPA = 33.8638866667
 IN_TO_MM = 25.4
 
+# Pull enough recent station records on every run to make the daily integrations
+# independent of GitHub Actions scheduling delays. Ambient Weather's historical
+# device endpoint returns recent observations rather than only the latest sample.
+HISTORY_LIMIT = 288
+MAX_SOLAR_GAP_MINUTES = 20.0
+MIN_MONTH_DAYS_FOR_SEASONAL_COMPARISON = 20
+
 OBS_FIELDS = [
     "timestamp_utc", "timestamp_local", "station_name",
     "temperature_c", "feels_like_c", "dew_point_c", "humidity_pct",
@@ -120,6 +127,23 @@ def choose_device(devices: list[dict], requested_mac: str | None) -> dict:
     )
 
 
+def get_recent_data(api_key: str, app_key: str, mac: str) -> list[dict]:
+    response = requests.get(
+        f"{API_ROOT}/devices/{mac}",
+        params={
+            "apiKey": api_key,
+            "applicationKey": app_key,
+            "limit": HISTORY_LIMIT,
+        },
+        timeout=30,
+    )
+    response.raise_for_status()
+    payload = response.json()
+    if not isinstance(payload, list):
+        raise RuntimeError("Ambient API returned an unexpected historical-data response.")
+    return payload
+
+
 def parse_timestamp(raw: dict) -> tuple[datetime, str]:
     milliseconds = number(raw.get("dateutc"))
     if milliseconds is not None:
@@ -134,15 +158,12 @@ def parse_timestamp(raw: dict) -> tuple[datetime, str]:
     return utc_dt, local_dt.isoformat()
 
 
-def normalize(device: dict) -> dict:
-    raw = device.get("lastData") or {}
+def normalize_raw(raw: dict, station_name: str) -> dict:
     utc_dt, local_text = parse_timestamp(raw)
-    info = device.get("info") or {}
-
     record = {
         "timestamp_utc": utc_dt.isoformat().replace("+00:00", "Z"),
         "timestamp_local": local_text,
-        "station_name": (info.get("name") or info.get("location") or "Brambley").strip(),
+        "station_name": station_name,
         "temperature_c": f_to_c(raw.get("tempf")),
         "feels_like_c": f_to_c(raw.get("feelsLike")),
         "dew_point_c": f_to_c(raw.get("dewPoint")),
@@ -165,27 +186,44 @@ def normalize(device: dict) -> dict:
     return {k: clean(v) for k, v in record.items()}
 
 
-def append_observation(record: dict) -> Path:
-    local_dt = datetime.fromisoformat(record["timestamp_local"])
-    path = OBS_DIR / f"{local_dt:%Y-%m}.csv"
+def station_name_from_device(device: dict) -> str:
+    info = device.get("info") or {}
+    return (info.get("name") or info.get("location") or "Brambley").strip()
+
+
+def append_observations(records: list[dict]) -> set[Path]:
+    """Append de-duplicated observations, grouped by local calendar month."""
+    by_path: dict[Path, list[dict]] = {}
+    for record in records:
+        local_dt = datetime.fromisoformat(record["timestamp_local"])
+        path = OBS_DIR / f"{local_dt:%Y-%m}.csv"
+        by_path.setdefault(path, []).append(record)
+
     OBS_DIR.mkdir(parents=True, exist_ok=True)
+    touched: set[Path] = set()
 
-    existing = set()
-    if path.exists():
-        with path.open(newline="", encoding="utf-8") as handle:
-            for row in csv.DictReader(handle):
-                existing.add(row.get("timestamp_utc"))
+    for path, incoming in by_path.items():
+        existing_rows: list[dict] = []
+        existing_stamps: set[str] = set()
+        if path.exists():
+            with path.open(newline="", encoding="utf-8") as handle:
+                existing_rows = list(csv.DictReader(handle))
+            existing_stamps = {r.get("timestamp_utc", "") for r in existing_rows}
 
-    if record["timestamp_utc"] in existing:
-        return path
+        additions = [r for r in incoming if r["timestamp_utc"] not in existing_stamps]
+        if not additions:
+            continue
 
-    new_file = not path.exists()
-    with path.open("a", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=OBS_FIELDS)
-        if new_file:
+        combined = existing_rows + [{k: r.get(k) for k in OBS_FIELDS} for r in additions]
+        combined.sort(key=lambda r: str(r.get("timestamp_utc", "")))
+
+        with path.open("w", newline="", encoding="utf-8") as handle:
+            writer = csv.DictWriter(handle, fieldnames=OBS_FIELDS)
             writer.writeheader()
-        writer.writerow({k: record.get(k) for k in OBS_FIELDS})
-    return path
+            writer.writerows(combined)
+        touched.add(path)
+
+    return touched
 
 
 def parse_float(row: dict, key: str) -> float | None:
@@ -199,7 +237,11 @@ def rebuild_daily(monthly_csv: Path) -> Path:
     grouped: dict[str, list[dict]] = {}
     for row in rows:
         local_stamp = row.get("timestamp_local") or ""
-        date_local = local_stamp[:10] if len(local_stamp) >= 10 and local_stamp[4:5] == "-" else row["timestamp_utc"][:10]
+        date_local = (
+            local_stamp[:10]
+            if len(local_stamp) >= 10 and local_stamp[4:5] == "-"
+            else row["timestamp_utc"][:10]
+        )
         grouped.setdefault(date_local, []).append(row)
 
     daily_rows = []
@@ -211,7 +253,7 @@ def rebuild_daily(monthly_csv: Path) -> Path:
         gusts = [v for r in observations if (v := parse_float(r, "wind_gust_kn")) is not None]
         daily_rain = [v for r in observations if (v := parse_float(r, "rain_daily_mm")) is not None]
 
-        solar = []
+        solar: list[tuple[datetime, float]] = []
         for row in observations:
             irradiance = parse_float(row, "solar_radiation_w_m2")
             if irradiance is None:
@@ -220,11 +262,15 @@ def rebuild_daily(monthly_csv: Path) -> Path:
             solar.append((stamp, irradiance))
         solar.sort()
 
+        # Trapezoidal integration of irradiance (W/m²) over time. We only bridge
+        # short gaps so an API outage cannot invent hours of solar energy.
         solar_kwh = 0.0
+        solar_intervals = 0
         for (t0, s0), (t1, s1) in zip(solar, solar[1:]):
             dt_h = (t1 - t0).total_seconds() / 3600.0
-            if 0 < dt_h <= 20.0 / 60.0:
+            if 0 < dt_h <= MAX_SOLAR_GAP_MINUTES / 60.0:
                 solar_kwh += ((s0 + s1) / 2.0) * dt_h / 1000.0
+                solar_intervals += 1
 
         daily_rows.append({
             "date_local": day,
@@ -237,7 +283,7 @@ def rebuild_daily(monthly_csv: Path) -> Path:
             "peak_gust_kn": round(max(gusts), 2) if gusts else None,
             "rain_total_mm": round(max(daily_rain), 2) if daily_rain else None,
             "solar_peak_w_m2": round(max((s for _, s in solar), default=0), 1) if solar else None,
-            "solar_energy_kwh_m2": round(solar_kwh, 3) if solar else None,
+            "solar_energy_kwh_m2": round(solar_kwh, 3) if solar_intervals else None,
             "observation_count": len(observations),
         })
 
@@ -250,7 +296,102 @@ def rebuild_daily(monthly_csv: Path) -> Path:
     return output
 
 
-def write_current(record: dict, device: dict) -> None:
+def read_all_daily() -> list[dict]:
+    rows: list[dict] = []
+    if not DAILY_DIR.exists():
+        return rows
+    for path in sorted(DAILY_DIR.glob("????-??.csv")):
+        with path.open(newline="", encoding="utf-8") as handle:
+            rows.extend(csv.DictReader(handle))
+    rows.sort(key=lambda r: r.get("date_local", ""))
+    return rows
+
+
+def current_day_summary(daily_rows: list[dict], local_date: str) -> dict[str, Any]:
+    row = next((r for r in reversed(daily_rows) if r.get("date_local") == local_date), None)
+    if not row:
+        return {
+            "date_local": local_date,
+            "temperature_high_c": None,
+            "temperature_low_c": None,
+            "temperature_mean_c": None,
+            "solar_energy_kwh_m2": None,
+        }
+    return {
+        "date_local": local_date,
+        "temperature_high_c": number(row.get("temperature_high_c")),
+        "temperature_low_c": number(row.get("temperature_low_c")),
+        "temperature_mean_c": number(row.get("temperature_avg_c")),
+        "solar_energy_kwh_m2": number(row.get("solar_energy_kwh_m2")),
+    }
+
+
+def write_solar_resource(daily_rows: list[dict], today_local: str) -> None:
+    daily_series = []
+    completed_by_month: dict[int, list[float]] = {m: [] for m in range(1, 13)}
+
+    for row in daily_rows:
+        date_text = row.get("date_local", "")
+        energy = number(row.get("solar_energy_kwh_m2"))
+        if not date_text or energy is None:
+            continue
+
+        complete = date_text < today_local
+        daily_series.append({
+            "date": date_text,
+            "kwh_m2": round(energy, 3),
+            "complete": complete,
+        })
+
+        if complete:
+            try:
+                month = int(date_text[5:7])
+            except (ValueError, IndexError):
+                continue
+            completed_by_month[month].append(energy)
+
+    month_names = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ]
+    climatology = []
+    eligible = []
+    for month in range(1, 13):
+        values = completed_by_month[month]
+        avg = round(sum(values) / len(values), 3) if values else None
+        item = {
+            "month": month,
+            "month_name": month_names[month - 1],
+            "average_daily_kwh_m2": avg,
+            "days_observed": len(values),
+            "eligible": len(values) >= MIN_MONTH_DAYS_FOR_SEASONAL_COMPARISON,
+        }
+        climatology.append(item)
+        if item["eligible"] and avg is not None:
+            eligible.append(item)
+
+    highest = max(eligible, key=lambda x: x["average_daily_kwh_m2"]) if eligible else None
+    lowest = min(eligible, key=lambda x: x["average_daily_kwh_m2"]) if eligible else None
+
+    payload = {
+        "generated_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "units": "kWh/m²",
+        "daily": daily_series,
+        "monthly_climatology": climatology,
+        "seasonal_records": {
+            "minimum_complete_days_per_month": MIN_MONTH_DAYS_FOR_SEASONAL_COMPARISON,
+            "ready": len(eligible) >= 2,
+            "highest": highest if len(eligible) >= 2 else None,
+            "lowest": lowest if len(eligible) >= 2 else None,
+        },
+    }
+    DATA.mkdir(parents=True, exist_ok=True)
+    (DATA / "solar-resource.json").write_text(
+        json.dumps(payload, indent=2) + "\n", encoding="utf-8"
+    )
+
+
+def write_current(record: dict, today: dict) -> None:
     current = {
         "status": "ok",
         "station": record["station_name"],
@@ -260,15 +401,17 @@ def write_current(record: dict, device: dict) -> None:
             k: v for k, v in record.items()
             if k not in ("timestamp_utc", "timestamp_local", "station_name")
         },
+        "today": today,
         "units": {
             "temperature_c": "°C", "feels_like_c": "°C", "dew_point_c": "°C",
+            "temperature_high_c": "°C", "temperature_low_c": "°C", "temperature_mean_c": "°C",
             "humidity_pct": "%", "pressure_relative_hpa": "hPa",
             "pressure_absolute_hpa": "hPa", "wind_speed_kn": "kn",
             "wind_gust_kn": "kn", "max_daily_gust_kn": "kn",
             "wind_direction_deg": "°", "rain_rate_mm_hr": "mm/h",
             "rain_daily_mm": "mm", "rain_event_mm": "mm", "rain_monthly_mm": "mm",
             "rain_total_mm": "mm", "solar_radiation_w_m2": "W/m²",
-            "uv_index": "UV index"
+            "solar_energy_kwh_m2": "kWh/m²", "uv_index": "UV index"
         },
     }
     DATA.mkdir(parents=True, exist_ok=True)
@@ -286,15 +429,40 @@ def main() -> int:
 
     devices = get_devices(api_key, app_key)
     device = choose_device(devices, requested_mac)
-    record = normalize(device)
+    station_name = station_name_from_device(device)
+    mac = str(device.get("macAddress") or "").strip()
+    if not mac:
+        raise RuntimeError("Selected Ambient Weather device has no MAC address.")
 
-    write_current(record, device)
-    monthly = append_observation(record)
-    daily = rebuild_daily(monthly)
+    raw_history = get_recent_data(api_key, app_key, mac)
+    if not raw_history:
+        raw_history = [device.get("lastData") or {}]
 
-    print(f"Collected {record['timestamp_utc']} from {record['station_name']}")
-    print(f"Updated {monthly.relative_to(ROOT)}")
-    print(f"Updated {daily.relative_to(ROOT)}")
+    records = [normalize_raw(raw, station_name) for raw in raw_history]
+    records.sort(key=lambda r: r["timestamp_utc"])
+    latest = records[-1]
+
+    touched = append_observations(records)
+
+    # Rebuild every touched month. Always rebuild the latest month as well so
+    # today's high/low/mean and solar total change throughout the day.
+    latest_month = OBS_DIR / f"{datetime.fromisoformat(latest['timestamp_local']):%Y-%m}.csv"
+    touched.add(latest_month)
+    for monthly in sorted(touched):
+        if monthly.exists():
+            rebuild_daily(monthly)
+
+    daily_rows = read_all_daily()
+    today_local = latest["timestamp_local"][:10]
+    today = current_day_summary(daily_rows, today_local)
+    write_current(latest, today)
+    write_solar_resource(daily_rows, today_local)
+
+    print(f"Collected through {latest['timestamp_utc']} from {latest['station_name']}")
+    print(f"Processed {len(records)} recent Ambient Weather observations")
+    print(f"Today's temperature: high={today['temperature_high_c']} low={today['temperature_low_c']} mean={today['temperature_mean_c']}")
+    print(f"Today's solar energy: {today['solar_energy_kwh_m2']} kWh/m²")
+    print("Updated data/current.json and data/solar-resource.json")
     return 0
 
 
