@@ -1,0 +1,48 @@
+<!-- Temporary companion block for web/weather-station.html. Paste directly below the main Weather Station Code Block. -->
+<script>
+(async()=>{
+  const RAW='https://raw.githubusercontent.com/TrentinP/brambley-weather/main/';
+  const $=id=>document.getElementById(id);
+  const monthLabel=s=>{const [y,m]=s.split('-').map(Number);return new Date(y,m-1,1).toLocaleDateString('en-US',{month:'short',year:'numeric'})};
+  const num=v=>v==null||v===''?null:(Number.isFinite(Number(v))?Number(v):null);
+  try{
+    const r=await fetch(RAW+'data/solar-resource.json?v='+Date.now());
+    if(!r.ok)throw Error('solar-resource.json');
+    const solar=await r.json();
+    const history=(solar.historical_monthly||[]).filter(x=>num(x.average_daily_kwh_m2)!==null);
+    if(!history.length)return;
+
+    const canvas=$('brw-solar-chart');
+    if(canvas){
+      const existing=Chart.getChart(canvas);if(existing)existing.destroy();
+      let chart=null;
+      function render(range){
+        let rows=history;
+        if(range!=='all')rows=history.slice(-12*Number(range));
+        const data={labels:rows.map(x=>monthLabel(x.month)),datasets:[{label:'Average daily solar energy',data:rows.map(x=>Number(x.average_daily_kwh_m2)),borderWidth:2,pointRadius:rows.length<=24?2:0,spanGaps:false,tension:.12}]};
+        if(chart){chart.data=data;chart.options.scales.x.ticks.maxTicksLimit=range==='1'?12:10;chart.update()}
+        else chart=new Chart(canvas,{type:'line',data,options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+Number(c.raw).toFixed(2)+' kWh/m²/day'}}},scales:{x:{ticks:{maxTicksLimit:12,color:'#51534c',font:{size:12}},grid:{color:'rgba(60,60,55,.09)'}},y:{beginAtZero:true,title:{display:true,text:'Average daily solar energy (kWh/m²/day)',color:'#3f413b',font:{size:13}},ticks:{color:'#51534c',font:{size:12}},grid:{color:'rgba(60,60,55,.11)'}}}}});
+      }
+      render('1');
+      const controls=$('brw-solar-range');
+      if(controls){const fresh=controls.cloneNode(true);controls.parentNode.replaceChild(fresh,controls);fresh.addEventListener('click',e=>{const b=e.target.closest('button[data-years]');if(!b)return;fresh.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));render(b.dataset.years)})}
+    }
+
+    const solarSection=$('brw-solar-chart')?.closest('.brw-solarhistory');
+    if(solarSection){
+      const eyebrow=solarSection.querySelector('.brw-subhead small');if(eyebrow)eyebrow.textContent='HISTORICAL SOLAR RESOURCE';
+      const heading=solarSection.querySelector('.brw-subhead h4');if(heading)heading.textContent='Solar energy over time';
+      const desc=solarSection.querySelector('.brw-subhead p');if(desc)desc.textContent='Monthly average daily solar energy derived from the station’s historical daily mean irradiance records.';
+    }
+    if($('brw-solar-note'))$('brw-solar-note').textContent='Historical values are derived from each day’s mean solar radiation (W/m² × 24 ÷ 1000). Months with limited coverage remain in the graph but are excluded from seasonal comparisons.';
+
+    const rec=solar.seasonal_records||{};
+    if(rec.ready&&rec.highest&&rec.lowest){
+      $('brw-solar-highmonth').textContent=rec.highest.month_name;
+      $('brw-solar-highdetail').textContent=Number(rec.highest.average_daily_kwh_m2).toFixed(2)+' kWh/m²/day · '+rec.highest.days_observed+' complete daily records.';
+      $('brw-solar-lowmonth').textContent=rec.lowest.month_name;
+      $('brw-solar-lowdetail').textContent=Number(rec.lowest.average_daily_kwh_m2).toFixed(2)+' kWh/m²/day · '+rec.lowest.days_observed+' complete daily records.';
+    }
+  }catch(e){console.error('Brambley historical solar patch:',e)}
+})();
+</script>
