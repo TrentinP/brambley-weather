@@ -1,19 +1,19 @@
 {
   "status": "ok",
   "station": "Brambley",
-  "observed_at_utc": "2026-09-22T05:25:00Z",
-  "observed_at_local": "2026-09-21T22:25:00-07:00",
+  "observed_at_utc": "2026-09-22T10:10:00Z",
+  "observed_at_local": "2026-09-22T03:10:00-07:00",
   "measurements": {
-    "temperature_c": 13.89,
-    "feels_like_c": 13.89,
-    "dew_point_c": 13.42,
-    "humidity_pct": 97.0,
+    "temperature_c": 11.89,
+    "feels_like_c": 11.89,
+    "dew_point_c": 11.58,
+    "humidity_pct": 98.0,
     "pressure_relative_hpa": 1010.63,
     "pressure_absolute_hpa": 1018.12,
     "wind_speed_kn": 0.0,
     "wind_gust_kn": 0.0,
-    "max_daily_gust_kn": 11.82,
-    "wind_direction_deg": 258.0,
+    "max_daily_gust_kn": 3.91,
+    "wind_direction_deg": 245.0,
     "wind_direction_compass": "WSW",
     "rain_rate_mm_hr": 0.0,
     "rain_daily_mm": 0.0,
@@ -24,11 +24,11 @@
     "uv_index": 0.0
   },
   "today": {
-    "date_local": "2026-09-21",
-    "temperature_high_c": 17.39,
-    "temperature_low_c": 6.39,
-    "temperature_mean_c": 12.47,
-    "solar_energy_kwh_m2": 1.824
+    "date_local": "2026-09-22",
+    "temperature_high_c": 14.0,
+    "temperature_low_c": 11.89,
+    "temperature_mean_c": 13.03,
+    "solar_energy_kwh_m2": 0.0
   },
   "units": {
     "temperature_c": "\u00b0C",
