@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-09-24T05:23:11.140703Z",
+  "generated_at_utc": "2026-09-24T10:12:50.896727Z",
   "units": "kWh/m\u00b2",
   "daily": [
     {
@@ -14231,6 +14231,12 @@
     {
       "date": "2026-09-23",
       "kwh_m2": 2.32,
+      "complete": true,
+      "source": "live_station"
+    },
+    {
+      "date": "2026-09-24",
+      "kwh_m2": 0.0,
       "complete": false,
       "source": "live_station"
     }
@@ -14295,8 +14301,8 @@
     {
       "month": 9,
       "month_name": "September",
-      "average_daily_kwh_m2": 2.209,
-      "days_observed": 200,
+      "average_daily_kwh_m2": 2.21,
+      "days_observed": 201,
       "eligible": true
     },
     {
