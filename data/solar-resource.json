@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-09-29T09:00:18.318413Z",
+  "generated_at_utc": "2026-09-29T15:24:46.301431Z",
   "units": "kWh/m\u00b2",
   "daily": [
     {
@@ -14262,6 +14262,12 @@
       "date": "2026-09-28",
       "kwh_m2": 0.033,
       "complete": true,
+      "source": "live_station"
+    },
+    {
+      "date": "2026-09-29",
+      "kwh_m2": 0.934,
+      "complete": false,
       "source": "live_station"
     }
   ],
