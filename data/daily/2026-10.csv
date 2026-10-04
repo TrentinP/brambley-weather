@@ -1,4 +1,5 @@
 date_local,temperature_avg_c,temperature_high_c,temperature_low_c,humidity_avg_pct,pressure_avg_hpa,wind_avg_kn,peak_gust_kn,rain_total_mm,solar_peak_w_m2,solar_energy_kwh_m2,observation_count
 2026-10-01,,,,,1010.6,0.45,5.04,0.0,,,288
 2026-10-02,15.83,17.78,13.5,97.0,1011.3,0.64,6.0,0.0,,,288
-2026-10-03,15.26,24.22,9.22,91.0,1011.2,0.75,8.95,0.0,,,239
+2026-10-03,14.94,24.22,9.22,91.7,1011.0,0.62,8.95,0.0,,,288
+2026-10-04,11.15,11.78,10.72,98.0,1010.4,0.0,0.0,0.0,,,14
