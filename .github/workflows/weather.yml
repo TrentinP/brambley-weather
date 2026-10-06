@@ -43,6 +43,9 @@ jobs:
           AMBIENT_DEVICE_MAC: ${{ secrets.AMBIENT_DEVICE_MAC }}
         run: python scripts/run_collector.py
 
+      - name: Finalize completed weather months
+        run: python scripts/finalize_monthly_archive.py
+
       - name: Merge historical daily solar resource
         run: python scripts/merge_solar_history.py
 
